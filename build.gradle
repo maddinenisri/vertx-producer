@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
+group 'com.mdstech.sample'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+ext {
+    vertxVersion = "3.7.0"
+}
+
+mainClassName = 'com.mdstechs.sample.Application'
+
+dependencies {
+    compile "io.vertx:vertx-core:$vertxVersion"
+    compile "io.vertx:vertx-web:$vertxVersion"
+    compile "io.vertx:vertx-hazelcast:$vertxVersion"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+shadowJar {
+    classifier = 'assemble'
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
